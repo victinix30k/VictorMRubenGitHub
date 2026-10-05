@@ -1,6 +1,7 @@
 package es.iescanarias.vm.guardarrectangulo.guardarrectangulo;
 
 public class Rectangulo {
+
     private double ancho;
     private double largo;
 
@@ -9,8 +10,15 @@ public class Rectangulo {
         this.largo = largo;
     }
 
-    public double getAncho() { return ancho; }
-    public double getLargo() { return largo; }
-    public double getArea() { return ancho * largo; }
-    public double getPerimetro() { return 2 * (ancho + largo); }
+    public double getAncho() {
+        return ancho;
+    }
+
+    public double getLargo() {
+        return largo;
+    }
+
+    public double getArea() {
+        return ancho * largo;
+    }
 }
