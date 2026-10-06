@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="es.iescanarias.vm.guardarrectangulo.guardarrectangulo.PrimaryControler">
+<VBox spacing="15" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="es.iescanarias.vm.guardarrectangulo.guardarrectangulo.ControladorPrincipal">
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
+    <HBox spacing="40">
+        <GridPane hgap="10" vgap="10">
+            <Label text="Ancho:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="Svancho" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+            <Label text="Largo:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="SVLargo" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        </GridPane>
+
+        <VBox spacing="10">
+            <Button fx:id="GuardarRec" text="Guardar" onAction="#onGuardarClick"/>
+            <Button fx:id="LeerRec" text="Leer" onAction="#onLeerClick"/>
+        </VBox>
+    </HBox>
+
+    <TextArea fx:id="Result" editable="false" prefRowCount="6" promptText="Resultado"/>
 </VBox>

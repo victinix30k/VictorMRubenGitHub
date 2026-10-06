@@ -21,4 +21,8 @@ public class Rectangulo {
     public double getArea() {
         return ancho * largo;
     }
+
+    public double getPerimetro() {
+        return 2 * (ancho + largo);
+    }
 }
