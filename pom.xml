@@ -23,7 +23,8 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>21.0.6</version>
+            <version>25-ea+21</version>
+            <type>jar</type>
         </dependency>
 
         <dependency>

@@ -1,55 +1,92 @@
 package es.iescanarias.vm.guardarrectangulo.guardarrectangulo;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-public class ControladorPrincipal {
-    private static final Path ARCHIVO = Paths.get("rectangulo.txt");
-
-    @FXML private TextField Svancho;
-    @FXML private TextField SVLargo;
-    @FXML private Button GuardarRec;
-    @FXML private Button LeerRec;
-    @FXML private TextArea Result;
+public class ControladorPrincipal{
 
     @FXML
-    private void onGuardarClick() {
-        try {
-            double ancho = Double.parseDouble(Svancho.getText().trim());
-            double largo = Double.parseDouble(SVLargo.getText().trim());
-            Rectangulo r = new Rectangulo(ancho, largo);
+    private TextField txtBase;
 
-            Files.writeString(ARCHIVO, ancho + ";" + largo);
-            Result.setText("Guardado.\nArea: " + r.getArea()
-                    + "\nPerimetro: " + r.getPerimetro());
-        } catch (NumberFormatException e) {
-            Result.setText("Error: ancho y largo deben ser numeros.");
+    @FXML
+    private TextField txtAltura;
+
+    @FXML
+    private Button btnGuardar;
+
+    @FXML
+    private Button btnLeer;
+
+    @FXML
+    private Label lblResultado;
+
+    private final String NOMBRE_ARCHIVO = "rectangulo.txt";
+
+    @FXML
+    protected void onGuardarClick() {
+        String baseStr = txtBase.getText().trim();
+        String alturaStr = txtAltura.getText().trim();
+
+        if (baseStr.isEmpty() || alturaStr.isEmpty()) {
+            if (lblResultado != null) {
+                lblResultado.setText("Por favor, rellena tanto la base como la altura.");
+            }
+            return;
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(NOMBRE_ARCHIVO))) {
+            writer.write(baseStr + ";" + alturaStr);
+            
+            if (lblResultado != null) {
+                lblResultado.setText("Guardado con éxito en '" + NOMBRE_ARCHIVO + "' (" + baseStr + " ; " + alturaStr + ")");
+            }
         } catch (IOException e) {
-            Result.setText("Error al guardar: " + e.getMessage());
+            if (lblResultado != null) {
+                lblResultado.setText("Error al guardar el archivo: " + e.getMessage());
+            }
         }
     }
 
     @FXML
-    private void onLeerClick() {
-        try {
-            String[] partes = Files.readString(ARCHIVO).trim().split(";");
-            Rectangulo r = new Rectangulo(
-                    Double.parseDouble(partes[0]), Double.parseDouble(partes[1]));
+    protected void onLeerClick() {
+        File archivo = new File(NOMBRE_ARCHIVO);
 
-            Svancho.setText(String.valueOf(r.getAncho()));
-            SVLargo.setText(String.valueOf(r.getLargo()));
-            Result.setText("Leido.\nAncho: " + r.getAncho()
-                    + "\nLargo: " + r.getLargo()
-                    + "\nArea: " + r.getArea()
-                    + "\nPerimetro: " + r.getPerimetro());
-        } catch (NoSuchFileException e) {
-            Result.setText("Aun no hay nada guardado.");
-        } catch (IOException | RuntimeException e) {
-            Result.setText("Error al leer: " + e.getMessage());
+        if (!archivo.exists()) {
+            if (lblResultado != null) {
+                lblResultado.setText("El archivo '" + NOMBRE_ARCHIVO + "' no existe todavía.");
+            }
+            return;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
+            String linea = reader.readLine();
+
+            if (linea != null && !linea.trim().isEmpty()) {
+                String[] datos = linea.split(";");
+                if (datos.length >= 2) {
+                    txtBase.setText(datos[0]);
+                    txtAltura.setText(datos[1]);
+                    if (lblResultado != null) {
+                        lblResultado.setText("Datos leídos correctamente: Base=" + datos[0] + ", Altura=" + datos[1]);
+                    }
+                } else if (lblResultado != null) {
+                    lblResultado.setText("Contenido leído: " + linea);
+                }
+            } else if (lblResultado != null) {
+                lblResultado.setText("El archivo está vacío.");
+            }
+        } catch (IOException e) {
+            if (lblResultado != null) {
+                lblResultado.setText("Error al leer el archivo: " + e.getMessage());
+            }
         }
     }
 }
